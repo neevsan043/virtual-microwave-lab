@@ -1,0 +1,221 @@
+.component-properties {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.properties-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.properties-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.btn-delete {
+  background: #ff4444;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background-color 0.3s;
+}
+
+.btn-delete:hover {
+  background: #cc0000;
+}
+
+.component-details {
+  text-align: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.component-icon-large {
+  font-size: 4rem;
+  margin-bottom: 12px;
+}
+
+.component-details h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.component-type {
+  margin: 0 0 8px 0;
+  color: #667eea;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.component-description {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.properties-section {
+  margin-bottom: 24px;
+}
+
+.properties-section h5 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.parameters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.parameter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.parameter-group label {
+  color: #555;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.parameter-group input[type="number"],
+.parameter-group input[type="text"] {
+  padding: 8px 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s;
+}
+
+.parameter-group input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.parameter-unit {
+  color: #999;
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.checkbox-label:hover {
+  background-color: #f8f9fa;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-label span {
+  color: #555;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.ports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.port-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.port-name {
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.port-type {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.port-type.input {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.port-type.output {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.port-type.bidirectional {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.position-info {
+  display: flex;
+  gap: 16px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.position-info span {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.empty-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .component-properties {
+    max-height: 400px;
+  }
+}

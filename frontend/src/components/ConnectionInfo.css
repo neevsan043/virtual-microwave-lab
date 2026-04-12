@@ -1,0 +1,149 @@
+.connection-info {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 16px;
+}
+
+.connection-info h4 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.connections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.connection-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 6px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s;
+}
+
+.connection-item.valid {
+  border-color: #4CAF50;
+  background: #f1f8f4;
+}
+
+.connection-item.invalid {
+  border-color: #ff9800;
+  background: #fff8f0;
+}
+
+.connection-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.connection-details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  font-size: 0.85rem;
+}
+
+.connection-from,
+.connection-to {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.component-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.port-name {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.connection-arrow {
+  color: #667eea;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0 4px;
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.valid {
+  background: #4CAF50;
+  color: white;
+}
+
+.status-badge.invalid {
+  background: #ff9800;
+  color: white;
+}
+
+.btn-delete-conn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: #f44336;
+  color: white;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.btn-delete-conn:hover {
+  background: #d32f2f;
+  transform: scale(1.1);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 24px;
+  color: #999;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+/* Scrollbar styling */
+.connections-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.connections-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.connections-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.connections-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
