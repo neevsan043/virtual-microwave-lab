@@ -75,6 +75,9 @@ export interface User {
   name: string;
   password_hash?: string;
   role: 'student' | 'instructor' | 'admin';
+  registration_number?: string;
+  phone_number?: string;
+  birthday?: string;
   enrolled_courses?: string[];
   created_at: Date;
   last_login: Date;

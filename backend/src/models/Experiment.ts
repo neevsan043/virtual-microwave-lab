@@ -1,4 +1,5 @@
 import { mongoClient } from '../config/database.js';
+import { ObjectId } from 'mongodb';
 import { Experiment } from '../types/index.js';
 
 const db = mongoClient.db('microwave_lab');
@@ -19,7 +20,7 @@ export class ExperimentModel {
   }
 
   static async findById(id: string): Promise<Experiment | null> {
-    const experiment = await experimentsCollection.findOne({ _id: id });
+    const experiment = await experimentsCollection.findOne({ _id: new ObjectId(id) });
     if (!experiment) return null;
 
     return {
@@ -69,7 +70,7 @@ export class ExperimentModel {
 
   static async update(id: string, updates: Partial<Experiment>): Promise<boolean> {
     const result = await experimentsCollection.updateOne(
-      { _id: id },
+      { _id: new ObjectId(id) },
       { $set: { ...updates, updatedAt: new Date() } }
     );
 
@@ -77,7 +78,7 @@ export class ExperimentModel {
   }
 
   static async delete(id: string): Promise<boolean> {
-    const result = await experimentsCollection.deleteOne({ _id: id });
+    const result = await experimentsCollection.deleteOne({ _id: new ObjectId(id) });
     return result.deletedCount > 0;
   }
 
