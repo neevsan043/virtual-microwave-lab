@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc || exit 0",
+    "build": "(tsc || true) && mkdir -p dist/config && cp src/config/schema.sql dist/config/schema.sql",
     "start": "node dist/server.js",
     "lint": "eslint src --ext .ts"
   },
