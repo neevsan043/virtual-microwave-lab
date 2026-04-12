@@ -53,6 +53,8 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
             <input
               type="text"
               id="name"
+              name="name"
+              autoComplete="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -65,6 +67,8 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
             <input
               type="email"
               id="email"
+              name="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -77,6 +81,8 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
             <input
               type="password"
               id="password"
+              name="password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -90,6 +96,8 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
             <input
               type="password"
               id="confirmPassword"
+              name="confirmPassword"
+              autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
@@ -115,6 +123,8 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
               <input
                 type="text"
                 id="registrationNumber"
+                name="registrationNumber"
+                autoComplete="off"
                 value={registrationNumber}
                 onChange={(e) => setRegistrationNumber(e.target.value)}
                 placeholder="Enter your registration number"
@@ -127,6 +137,8 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
             <input
               type="tel"
               id="phoneNumber"
+              name="phoneNumber"
+              autoComplete="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               placeholder="Enter your phone number"
