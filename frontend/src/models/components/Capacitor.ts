@@ -16,15 +16,15 @@ export class Capacitor extends Component {
   initializePorts(): Port[] {
     return [
       {
-        id: `${this.id}_in`,
-        name: 'In',
-        type: 'input',
+        id: `${this.id}_p1`,
+        name: 'Port 1',
+        type: 'bidirectional',
         position: { x: 0, y: 25 },
       },
       {
-        id: `${this.id}_out`,
-        name: 'Out',
-        type: 'output',
+        id: `${this.id}_p2`,
+        name: 'Port 2',
+        type: 'bidirectional',
         position: { x: 80, y: 25 },
       },
     ];

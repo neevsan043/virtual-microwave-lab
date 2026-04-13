@@ -19,9 +19,9 @@ export class Balun extends Component {
 
   initializePorts(): Port[] {
     return [
-      { id: `${this.id}_unbal`,  name: 'Unbalanced (Coax)', type: 'input',  position: { x: 0,  y: 25 } },
-      { id: `${this.id}_bal_p`,  name: 'Balanced +',        type: 'output', position: { x: 80, y: 10 } },
-      { id: `${this.id}_bal_n`,  name: 'Balanced −',        type: 'output', position: { x: 80, y: 40 } },
+      { id: `${this.id}_p1`,  name: 'Unbalanced (Coax)', type: 'bidirectional',  position: { x: 0,  y: 25 } },
+      { id: `${this.id}_p2`,  name: 'Balanced +',        type: 'bidirectional', position: { x: 80, y: 10 } },
+      { id: `${this.id}_p3`,  name: 'Balanced −',        type: 'bidirectional', position: { x: 80, y: 40 } },
     ];
   }
 

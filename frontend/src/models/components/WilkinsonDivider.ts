@@ -17,9 +17,9 @@ export class WilkinsonDivider extends Component {
 
   initializePorts(): Port[] {
     return [
-      { id: `${this.id}_in`,   name: 'In',   type: 'input',  position: { x: 0,  y: 25 } },
-      { id: `${this.id}_out1`, name: 'Out 1', type: 'output', position: { x: 80, y: 10 } },
-      { id: `${this.id}_out2`, name: 'Out 2', type: 'output', position: { x: 80, y: 40 } },
+      { id: `${this.id}_p1`,  name: 'Port 1 (Input)',   type: 'bidirectional',  position: { x: 0,  y: 25 } },
+      { id: `${this.id}_p2`,  name: 'Port 2 (Output 1)', type: 'bidirectional', position: { x: 80, y: 10 } },
+      { id: `${this.id}_p3`,  name: 'Port 3 (Output 2)', type: 'bidirectional', position: { x: 80, y: 40 } },
     ];
   }
 

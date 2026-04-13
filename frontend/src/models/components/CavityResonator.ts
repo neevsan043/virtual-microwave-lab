@@ -18,8 +18,8 @@ export class CavityResonator extends Component {
 
   initializePorts(): Port[] {
     return [
-      { id: `${this.id}_in`,  name: 'Coupling 1', type: 'input',  position: { x: 0,  y: 25 } },
-      { id: `${this.id}_out`, name: 'Coupling 2', type: 'output', position: { x: 80, y: 25 } },
+      { id: `${this.id}_p1`,  name: 'Port 1 (Coupling)', type: 'bidirectional',  position: { x: 0,  y: 25 } },
+      { id: `${this.id}_p2`,  name: 'Port 2 (Coupling)', type: 'bidirectional', position: { x: 80, y: 25 } },
     ];
   }
 

@@ -18,8 +18,8 @@ export class NoiseFigureAnalyzer extends Component {
 
   initializePorts(): Port[] {
     return [
-      { id: `${this.id}_dut_in`,    name: 'DUT In',  type: 'output', position: { x: 0,  y: 15 } },
-      { id: `${this.id}_input`,     name: 'RF In',   type: 'input',  position: { x: 0,  y: 40 } },
+      { id: `${this.id}_noise_drive`, name: 'Noise Drive (+28V)', type: 'output', position: { x: 0,  y: 15 } },
+      { id: `${this.id}_input`,       name: 'RF In',              type: 'input',  position: { x: 0,  y: 40 } },
     ];
   }
 

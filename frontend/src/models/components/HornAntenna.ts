@@ -21,7 +21,7 @@ export class HornAntenna extends Component {
       {
         id: `${this.id}_feed`,
         name: 'Feed',
-        type: 'input',
+        type: 'bidirectional',
         position: { x: 0, y: 25 },
       },
     ];

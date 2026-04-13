@@ -55,11 +55,9 @@ export class Circulator extends Component {
 
   getCompatiblePortTypes(): string[] {
     return [
-      'signal_generator',
-      'transmission_line',
-      'amplifier',
-      'antenna',
-      'power_meter',
+      'signal_generator', 'amplifier', 'transmission_line',
+      'horn_antenna', 'dipole_antenna', 'patch_antenna', 'parabolic_antenna',
+      'isolator', 'power_meter', 'directional_coupler',
     ];
   }
 }

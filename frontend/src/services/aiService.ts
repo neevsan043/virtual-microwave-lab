@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+import { api, API_BASE_URL } from './api';
 
 export interface AISpatialComponent {
   id: string;
@@ -34,8 +32,8 @@ export const aiService = {
     const formData = new FormData();
     formData.append('image', imageFile);
 
-    const response = await axios.post<AIAnalysisResult>(
-      `${API_URL}/ai/analyze-circuit`,
+    const response = await api.post<AIAnalysisResult>(
+      '/ai/analyze-circuit',
       formData,
       {
         headers: {

@@ -39,10 +39,10 @@ export class DirectionalCoupler extends Component {
 
   initializePorts(): Port[] {
     return [
-      { id: `${this.id}_input`,    name: 'Input',   type: 'input',  position: { x: 0,  y: 15 } },
-      { id: `${this.id}_through`,  name: 'Through', type: 'output', position: { x: 80, y: 15 } },
-      { id: `${this.id}_coupled`,  name: 'Coupled', type: 'output', position: { x: 40, y: 0  } },
-      { id: `${this.id}_isolated`, name: 'Isolated',type: 'output', position: { x: 40, y: 50 } },
+      { id: `${this.id}_p1`, name: 'Port 1 (Input)',   type: 'bidirectional',  position: { x: 0,  y: 15 } },
+      { id: `${this.id}_p2`, name: 'Port 2 (Through)', type: 'bidirectional', position: { x: 80, y: 15 } },
+      { id: `${this.id}_p3`, name: 'Port 3 (Coupled)', type: 'bidirectional', position: { x: 40, y: 0  } },
+      { id: `${this.id}_p4`, name: 'Port 4 (Isolated)',type: 'bidirectional', position: { x: 40, y: 50 } },
     ];
   }
 

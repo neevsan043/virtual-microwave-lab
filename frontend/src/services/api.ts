@@ -1,6 +1,27 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const getApiBaseUrl = () => {
+  // 1. Check if provided via environment variable (baked in at build time)
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+
+  // 2. Detect if we're on localhost
+  const { hostname, origin } = window.location;
+  const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.');
+
+  // 3. Smart fallback
+  if (!isLocal) {
+    // If running on a global URL (e.g. Vercel/Netlify), 
+    // default to same-origin /api which is standard for full-stack deployments
+    return `${origin}/api`;
+  }
+
+  // 4. Development default
+  return 'http://localhost:5001/api';
+};
+
+export const API_BASE_URL = getApiBaseUrl();
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

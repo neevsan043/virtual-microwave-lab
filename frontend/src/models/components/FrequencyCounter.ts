@@ -17,10 +17,16 @@ export class FrequencyCounter extends Component {
   initializePorts(): Port[] {
     return [
       {
-        id: `${this.id}_in`,
-        name: 'Input',
+        id: `${this.id}_ch_a`,
+        name: 'Channel A',
         type: 'input',
-        position: { x: 0, y: 25 },
+        position: { x: 0, y: 15 },
+      },
+      {
+        id: `${this.id}_ch_b`,
+        name: 'Channel B',
+        type: 'input',
+        position: { x: 0, y: 40 },
       },
     ];
   }

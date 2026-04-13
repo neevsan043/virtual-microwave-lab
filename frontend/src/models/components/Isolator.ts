@@ -48,10 +48,9 @@ export class Isolator extends Component {
 
   getCompatiblePortTypes(): string[] {
     return [
-      'signal_generator',
-      'amplifier',
-      'transmission_line',
-      'antenna',
+      'signal_generator', 'amplifier', 'transmission_line',
+      'circulator', 'power_meter', 'directional_coupler',
+      'horn_antenna', 'dipole_antenna', 'patch_antenna',
     ];
   }
 }

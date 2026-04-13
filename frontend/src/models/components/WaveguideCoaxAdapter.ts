@@ -19,8 +19,8 @@ export class WaveguideCoaxAdapter extends Component {
 
   initializePorts(): Port[] {
     return [
-      { id: `${this.id}_wg`,   name: 'WG Port',   type: 'input',  position: { x: 0,  y: 25 } },
-      { id: `${this.id}_coax`, name: 'Coax Port', type: 'output', position: { x: 80, y: 25 } },
+      { id: `${this.id}_wg`,   name: 'WG Port',   type: 'bidirectional',  position: { x: 0,  y: 25 } },
+      { id: `${this.id}_coax`, name: 'Coax Port', type: 'bidirectional', position: { x: 80, y: 25 } },
     ];
   }
 

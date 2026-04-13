@@ -22,7 +22,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL,
     methods: ['GET', 'POST']
   }
 });
@@ -80,9 +80,9 @@ async function startServer() {
 
     // Start server
     httpServer.listen(PORT, () => {
-      console.log(`\n✅ Server running on port ${PORT}`);
-      console.log(`   API: http://localhost:${PORT}/api`);
-      console.log(`   Health: http://localhost:${PORT}/api/health\n`);
+      console.log(`\n✅ Server running in ${process.env.NODE_ENV} mode`);
+      console.log(`   Port: ${PORT}`);
+      console.log(`   Frontend: ${process.env.FRONTEND_URL}\n`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);

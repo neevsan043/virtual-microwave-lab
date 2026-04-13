@@ -17,21 +17,21 @@ export class PowerCombiner extends Component {
   initializePorts(): Port[] {
     return [
       {
-        id: `${this.id}_in1`,
-        name: 'In 1',
-        type: 'input',
+        id: `${this.id}_p1`,
+        name: 'Port 1',
+        type: 'bidirectional',
         position: { x: 0, y: 15 },
       },
       {
-        id: `${this.id}_in2`,
-        name: 'In 2',
-        type: 'input',
+        id: `${this.id}_p2`,
+        name: 'Port 2',
+        type: 'bidirectional',
         position: { x: 0, y: 35 },
       },
       {
-        id: `${this.id}_out`,
-        name: 'Output',
-        type: 'output',
+        id: `${this.id}_p3`,
+        name: 'Port 3',
+        type: 'bidirectional',
         position: { x: 80, y: 25 },
       },
     ];

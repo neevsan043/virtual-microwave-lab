@@ -10,8 +10,7 @@
 
 import { SimulationResult } from '../simulation/RFSimulator';
 import { ComplexMath } from '../models/Component';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+import { API_BASE_URL } from './api';
 
 // ─── Shared Types ─────────────────────────────────────────────────────────────
 
@@ -404,7 +403,7 @@ export async function analyzeSimulationWithGemini(
   if (!token) throw new Error('You must be logged in to use Gemini analysis.');
 
   const summary  = buildResultsSummary(result);
-  const response = await fetch(`${API_URL}/ai/analyze-simulation`, {
+  const response = await fetch(`${API_BASE_URL}/ai/analyze-simulation`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

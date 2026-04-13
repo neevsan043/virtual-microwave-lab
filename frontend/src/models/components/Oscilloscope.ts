@@ -27,13 +27,19 @@ export class Oscilloscope extends Component {
         id: `${this.id}_ch2`,
         name: 'CH2',
         type: 'input',
-        position: { x: 0, y: 25 },
+        position: { x: 0, y: 23 },
       },
       {
         id: `${this.id}_ch3`,
         name: 'CH3',
         type: 'input',
-        position: { x: 0, y: 40 },
+        position: { x: 0, y: 36 },
+      },
+      {
+        id: `${this.id}_ch4`,
+        name: 'CH4',
+        type: 'input',
+        position: { x: 0, y: 49 },
       },
     ];
   }
