@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://virtual-microwave-lab-backend.onrender.com/api/$1"
+      "destination": "https://virtual-microwave-lab-api.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",
