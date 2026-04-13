@@ -1,27 +1,29 @@
 import axios from 'axios';
 
 const getApiBaseUrl = () => {
-  // 1. Check if provided via environment variable (baked in at build time)
-  if (import.meta.env.VITE_API_URL) {
+  // 1. Check if we're on localhost
+  const { hostname } = window.location;
+  const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+
+  // 2. Priority: Environment variable (if set at build time)
+  if (import.meta.env.VITE_API_URL && !isLocal) {
     return import.meta.env.VITE_API_URL;
   }
 
-  // 2. Detect if we're on localhost
-  const { hostname, origin } = window.location;
-  const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.');
-
-  // 3. Smart fallback
-  if (!isLocal) {
-    // If running on a global URL (e.g. Vercel/Netlify), 
-    // default to same-origin /api which is standard for full-stack deployments
-    return `${origin}/api`;
+  // 3. Detect if we're on an Antigravity tunnel or local dev
+  if (isLocal || hostname.includes('antigravity.dev')) {
+    // If on localhost OR antigravity tunnel but want to hit local dev server
+    // Note: If you want to use the global API even in the tunnel, 
+    // you should visit the Vercel URL instead.
+    return 'http://localhost:5001/api';
   }
 
-  // 4. Development default
-  return 'http://localhost:5001/api';
+  // 4. Production default: use relative path for Vercel rewrites
+  return '/api';
 };
 
 export const API_BASE_URL = getApiBaseUrl();
+console.log('🌐 [API] Base URL:', API_BASE_URL);
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
