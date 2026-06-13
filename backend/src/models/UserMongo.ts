@@ -17,6 +17,7 @@ export interface MongoUser {
 
 export class UserMongoModel {
   private static get collection() {
+    if (!mongoClient) throw new Error('MongoDB is not connected');
     return mongoClient.db().collection<MongoUser>('users');
   }
 

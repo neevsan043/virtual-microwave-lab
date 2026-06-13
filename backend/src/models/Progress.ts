@@ -23,6 +23,7 @@ export interface ProgressDocument {
 
 export class ProgressModel {
   static getCollection() {
+    if (!mongoClient) throw new Error('MongoDB is not connected');
     return mongoClient.db(DB_NAME).collection<ProgressDocument>(COLLECTION_NAME);
   }
 

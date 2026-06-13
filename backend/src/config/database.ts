@@ -28,21 +28,22 @@ export const pgPool = new Pool(
 
 // MongoDB client
 const mongoUri = process.env.MONGODB_URI;
-if (!mongoUri) {
-  console.error('❌ MONGODB_URI is not defined in environment variables');
-}
-export const mongoClient = new MongoClient(mongoUri || '');
+export const mongoClient = mongoUri ? new MongoClient(mongoUri) : null;
+export let isMongoConnected = false;
 
 // Redis client (Optional)
 export const redisClient = process.env.REDIS_URL
   ? createClient({ url: process.env.REDIS_URL })
-  : createClient({
+  : process.env.REDIS_HOST
+  ? createClient({
       socket: {
         host: process.env.REDIS_HOST || '127.0.0.1',
         port: parseInt(process.env.REDIS_PORT || '6379'),
       },
       password: process.env.REDIS_PASSWORD || undefined,
-    });
+    })
+  : null;
+export let isRedisConnected = false;
 
 // Initialize database connections with retry logic
 export async function initializeDatabases() {
@@ -58,18 +59,26 @@ export async function initializeDatabases() {
       console.log('✓ PostgreSQL connected');
       pgClient.release();
 
-      // Connect to MongoDB
-      console.log('Attempting MongoDB connection...');
-      await mongoClient.connect();
-      console.log('✓ MongoDB connected');
+      // Connect to MongoDB (Non-fatal)
+      if (mongoClient) {
+        try {
+          await mongoClient.connect();
+          isMongoConnected = true;
+          console.log('✓ MongoDB connected');
+        } catch (mongoError) {
+          console.warn('⚠️ MongoDB connection failed. Continuing without MongoDB.');
+        }
+      }
 
-      // Connect to Redis (Optional)
-      console.log('Attempting Redis connection...');
-      try {
-        await redisClient.connect();
-        console.log('✓ Redis connected');
-      } catch (redisError) {
-        console.warn('⚠️ Redis connection failed (Optional). Continuing without Redis.');
+      // Connect to Redis (Non-fatal)
+      if (redisClient) {
+        try {
+          await redisClient.connect();
+          isRedisConnected = true;
+          console.log('✓ Redis connected');
+        } catch (redisError) {
+          console.warn('⚠️ Redis connection failed. Continuing without Redis.');
+        }
       }
 
       return true;
@@ -80,7 +89,7 @@ export async function initializeDatabases() {
         console.log(`Retrying in ${retryDelay / 1000} seconds...`);
         await new Promise(resolve => setTimeout(resolve, retryDelay));
       } else {
-        console.error('All database connection attempts failed');
+        console.error('PostgreSQL connection failed after all attempts');
         return false;
       }
     }
@@ -92,8 +101,10 @@ export async function initializeDatabases() {
 // Graceful shutdown
 export async function closeDatabases() {
   await pgPool.end();
-  await mongoClient.close();
-  if (redisClient.isOpen) {
+  if (mongoClient) {
+    await mongoClient.close();
+  }
+  if (redisClient && redisClient.isOpen) {
     await redisClient.quit();
   }
   console.log('All database connections closed');

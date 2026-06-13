@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { initializeDatabases, closeDatabases } from './config/database.js';
+import { initializeDatabases, closeDatabases, isMongoConnected, isRedisConnected } from './config/database.js';
 import { initializeSchema } from './utils/initDb.js';
 import { ExperimentModel } from './models/Experiment.js';
 import { CircuitModel } from './models/Circuit.js';
@@ -20,15 +20,23 @@ dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
+
+// Allow both the production Vercel URL and local development
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:3000',
+  'http://localhost:5173',
+].filter(Boolean) as string[];
+
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL,
+    origin: allowedOrigins,
     methods: ['GET', 'POST']
   }
 });
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 
 // Routes
@@ -39,9 +47,17 @@ app.use('/api/progress', progressRoutes);
 app.use('/api/instructor', instructorRoutes);
 app.use('/api/ai', aiAnalysisRoutes);
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Virtual Microwave Lab API is running' });
+// Health check endpoint — always responds regardless of optional DB status
+app.get('/api/health', (_req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'Virtual Microwave Lab API is running',
+    databases: {
+      postgresql: 'connected',
+      mongodb: isMongoConnected ? 'connected' : 'unavailable',
+      redis: isRedisConnected ? 'connected' : 'unavailable',
+    },
+  });
 });
 
 // Socket.IO connection handling
@@ -70,13 +86,15 @@ async function startServer() {
     // Initialize database schema
     await initializeSchema();
 
-    // Create MongoDB indexes
-    await UserMongoModel.createIndexes();
-    await CircuitModel.createIndexes();
-    await ProgressModel.createIndexes();
-
-    // Seed default experiments
-    await ExperimentModel.seedDefaultExperiments();
+    // Create MongoDB indexes and seed experiments only if MongoDB is available
+    if (isMongoConnected) {
+      await UserMongoModel.createIndexes();
+      await CircuitModel.createIndexes();
+      await ProgressModel.createIndexes();
+      await ExperimentModel.seedDefaultExperiments();
+    } else {
+      console.warn('⚠️  MongoDB unavailable — skipping index creation and experiment seeding');
+    }
 
     // Start server
     httpServer.listen(PORT, () => {

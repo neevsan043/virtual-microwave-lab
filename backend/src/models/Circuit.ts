@@ -23,6 +23,7 @@ export interface CircuitDocument {
 
 export class CircuitModel {
   static getCollection() {
+    if (!mongoClient) throw new Error('MongoDB is not connected');
     return mongoClient.db(DB_NAME).collection<CircuitDocument>(COLLECTION_NAME);
   }
 

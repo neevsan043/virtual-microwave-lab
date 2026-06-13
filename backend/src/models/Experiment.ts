@@ -2,12 +2,14 @@ import { mongoClient } from '../config/database.js';
 import { ObjectId } from 'mongodb';
 import { Experiment } from '../types/index.js';
 
-const db = mongoClient.db('microwave_lab');
-const experimentsCollection = db.collection('experiments');
+function getCollection() {
+  if (!mongoClient) throw new Error('MongoDB is not connected');
+  return mongoClient.db('microwave_lab').collection('experiments');
+}
 
 export class ExperimentModel {
   static async create(experiment: Omit<Experiment, 'id'>): Promise<Experiment> {
-    const result = await experimentsCollection.insertOne({
+    const result = await getCollection().insertOne({
       ...experiment,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -20,7 +22,7 @@ export class ExperimentModel {
   }
 
   static async findById(id: string): Promise<Experiment | null> {
-    const experiment = await experimentsCollection.findOne({ _id: new ObjectId(id) });
+    const experiment = await getCollection().findOne({ _id: new ObjectId(id) });
     if (!experiment) return null;
 
     return {
@@ -37,7 +39,7 @@ export class ExperimentModel {
   }
 
   static async findAll(): Promise<Experiment[]> {
-    const experiments = await experimentsCollection.find({}).toArray();
+    const experiments = await getCollection().find({}).toArray();
     
     return experiments.map(exp => ({
       id: exp._id.toString(),
@@ -53,7 +55,7 @@ export class ExperimentModel {
   }
 
   static async findByDifficulty(difficulty: string): Promise<Experiment[]> {
-    const experiments = await experimentsCollection.find({ difficulty }).toArray();
+    const experiments = await getCollection().find({ difficulty }).toArray();
     
     return experiments.map(exp => ({
       id: exp._id.toString(),
@@ -69,7 +71,7 @@ export class ExperimentModel {
   }
 
   static async update(id: string, updates: Partial<Experiment>): Promise<boolean> {
-    const result = await experimentsCollection.updateOne(
+    const result = await getCollection().updateOne(
       { _id: new ObjectId(id) },
       { $set: { ...updates, updatedAt: new Date() } }
     );
@@ -78,12 +80,13 @@ export class ExperimentModel {
   }
 
   static async delete(id: string): Promise<boolean> {
-    const result = await experimentsCollection.deleteOne({ _id: new ObjectId(id) });
+    const result = await getCollection().deleteOne({ _id: new ObjectId(id) });
     return result.deletedCount > 0;
   }
 
   static async seedDefaultExperiments(): Promise<void> {
-    const count = await experimentsCollection.countDocuments();
+    const col = getCollection();
+    const count = await col.countDocuments();
     if (count > 0) return; // Already seeded
 
     const defaultExperiments = [
@@ -205,7 +208,7 @@ export class ExperimentModel {
       },
     ];
 
-    await experimentsCollection.insertMany(defaultExperiments);
+    await col.insertMany(defaultExperiments);
     console.log('✓ Default experiments seeded');
   }
 }

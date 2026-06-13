@@ -1,4 +1,4 @@
-import { pgPool } from '../config/database.js';
+import { pgPool, isMongoConnected } from '../config/database.js';
 import bcrypt from 'bcryptjs';
 import { User } from '../types/index.js';
 import { UserMongoModel } from './UserMongo.js';
@@ -18,7 +18,7 @@ export class UserModel {
       const user = result.rows[0];
 
       // Sync to MongoDB (without password)
-      if (user) {
+      if (user && isMongoConnected) {
         await UserMongoModel.syncUser({
           userId: user.id,
           email: user.email,
@@ -86,17 +86,19 @@ export class UserModel {
       );
 
       // Sync last login to MongoDB
-      await UserMongoModel.syncUser({
-        userId: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        registrationNumber: user.registration_number,
-        phoneNumber: user.phone_number,
-        birthday: user.birthday,
-        createdAt: user.created_at,
-        lastLogin: new Date(),
-      });
+      if (isMongoConnected) {
+        await UserMongoModel.syncUser({
+          userId: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          registrationNumber: user.registration_number,
+          phoneNumber: user.phone_number,
+          birthday: user.birthday,
+          createdAt: user.created_at,
+          lastLogin: new Date(),
+        });
+      }
 
       // Return user without password hash
       const { password_hash, ...userWithoutPassword } = user;
@@ -208,7 +210,7 @@ export class UserModel {
       const user = result.rows[0];
 
       // Sync to MongoDB
-      if (user) {
+      if (user && isMongoConnected) {
         await UserMongoModel.syncUser({
           userId: user.id,
           email: user.email,
@@ -277,8 +279,10 @@ export class UserModel {
       console.log(`✓ User deleted from PostgreSQL: ${user.email}`);
 
       // Delete from MongoDB
-      await UserMongoModel.deleteUser(userId);
-      console.log(`✓ User deleted from MongoDB: ${user.email}`);
+      if (isMongoConnected) {
+        await UserMongoModel.deleteUser(userId);
+        console.log(`✓ User deleted from MongoDB: ${user.email}`);
+      }
 
       return { success: true };
     } catch (error) {
