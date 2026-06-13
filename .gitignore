@@ -7,12 +7,10 @@ dist/
 build/
 .next/
 
-# Environment variables (IMPORTANT: never commit these)
-.env
-.env.local
-.env.*.local
-backend/.env
-frontend/.env
+# Environment variables — frontend only (no secrets)
+# backend/.env — committed intentionally for Render deploy (contains DB URLs)
+frontend/.env.local
+frontend/.env.*.local
 
 # Logs
 logs/
