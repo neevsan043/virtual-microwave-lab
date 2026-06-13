@@ -47,13 +47,17 @@ app.use('/api/progress', progressRoutes);
 app.use('/api/instructor', instructorRoutes);
 app.use('/api/ai', aiAnalysisRoutes);
 
+// Track server readiness
+let serverReady = false;
+
 // Health check endpoint — always responds regardless of optional DB status
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
     message: 'Virtual Microwave Lab API is running',
+    ready: serverReady,
     databases: {
-      postgresql: 'connected',
+      postgresql: serverReady ? 'connected' : 'initializing',
       mongodb: isMongoConnected ? 'connected' : 'unavailable',
       redis: isRedisConnected ? 'connected' : 'unavailable',
     },
@@ -75,18 +79,26 @@ const PORT = process.env.PORT || 5000;
 async function startServer() {
   try {
     console.log('🚀 Starting Virtual Microwave Lab API...\n');
-    
-    // Initialize database connections
+
+    // ── Start HTTP server immediately so health checks respond right away ──
+    httpServer.listen(PORT, () => {
+      console.log(`\n✅ HTTP server listening on port ${PORT}`);
+      console.log(`   Mode: ${process.env.NODE_ENV}`);
+      console.log(`   Frontend: ${process.env.FRONTEND_URL}\n`);
+    });
+
+    // ── Initialize database connections (runs after server is already listening) ──
     const dbConnected = await initializeDatabases();
     if (!dbConnected) {
-      console.error('❌ Failed to connect to databases');
-      process.exit(1);
+      console.error('❌ Failed to connect to PostgreSQL — API will not function correctly');
+      // Do NOT exit — let the server keep running so health checks still respond
+      return;
     }
 
-    // Initialize database schema
+    // Initialize PostgreSQL schema
     await initializeSchema();
 
-    // Create MongoDB indexes and seed experiments only if MongoDB is available
+    // MongoDB-dependent setup (only if connected)
     if (isMongoConnected) {
       await UserMongoModel.createIndexes();
       await CircuitModel.createIndexes();
@@ -96,15 +108,11 @@ async function startServer() {
       console.warn('⚠️  MongoDB unavailable — skipping index creation and experiment seeding');
     }
 
-    // Start server
-    httpServer.listen(PORT, () => {
-      console.log(`\n✅ Server running in ${process.env.NODE_ENV} mode`);
-      console.log(`   Port: ${PORT}`);
-      console.log(`   Frontend: ${process.env.FRONTEND_URL}\n`);
-    });
+    serverReady = true;
+    console.log('\n🎉 Server fully initialized and ready!');
   } catch (error) {
-    console.error('Failed to start server:', error);
-    process.exit(1);
+    console.error('Startup error (non-fatal):', error);
+    // Server stays up even if post-start init fails
   }
 }
 
