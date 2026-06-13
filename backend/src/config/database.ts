@@ -3,7 +3,7 @@ import { MongoClient } from 'mongodb';
 import { createClient } from 'redis';
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config({ override: true }); // override any stale Render dashboard env vars
 
 export const pgPool = new Pool(
   process.env.POSTGRES_URL
