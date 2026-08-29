@@ -1,4 +1,4 @@
-import { mongoClient } from '../config/database.js';
+import { mongoClient, isMongoConnected } from '../config/database.js';
 import { ObjectId } from 'mongodb';
 
 const DB_NAME = 'microwave_lab';
@@ -23,7 +23,7 @@ export interface ProgressDocument {
 
 export class ProgressModel {
   static getCollection() {
-    if (!mongoClient) throw new Error('MongoDB is not connected');
+    if (!mongoClient || !isMongoConnected) throw new Error('MongoDB is not connected');
     return mongoClient.db(DB_NAME).collection<ProgressDocument>(COLLECTION_NAME);
   }
 
@@ -157,6 +157,7 @@ export class ProgressModel {
    * Get all progress for a user
    */
   static async getUserProgress(userId: string): Promise<ProgressDocument[]> {
+    if (!isMongoConnected) return []; // graceful degradation
     const collection = this.getCollection();
     return await collection
       .find({ userId })
@@ -173,6 +174,7 @@ export class ProgressModel {
     inProgress: number;
     notStarted: number;
   }> {
+    if (!isMongoConnected) return { total: 0, completed: 0, inProgress: 0, notStarted: 0 };
     const collection = this.getCollection();
     
     const progress = await collection.find({ userId }).toArray();

@@ -1,25 +1,33 @@
 import express, { Request, Response } from 'express';
-import { ProgressModel } from '../models/Progress.js';
+import { ProgressModel, ProgressDocument } from '../models/Progress.js';
 import { authenticateToken } from '../middleware/auth.js';
+import { isMongoConnected } from '../config/database.js';
 
 const router = express.Router();
+
+// Get progress statistics — MUST be before /:experimentId to avoid route conflict
+router.get('/stats', authenticateToken, async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = req.user?.userId;
+    if (!userId) { res.status(401).json({ error: 'Not authenticated' }); return; }
+    const stats = await ProgressModel.getUserStats(userId);
+    res.json({ stats });
+  } catch (error) {
+    console.error('Get progress stats error:', error);
+    res.json({ stats: { total: 0, completed: 0, inProgress: 0, notStarted: 0 } });
+  }
+});
 
 // Get all progress for current user
 router.get('/', authenticateToken, async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = req.user?.userId;
-
-    if (!userId) {
-      res.status(401).json({ error: 'Not authenticated' });
-      return;
-    }
-
+    if (!userId) { res.status(401).json({ error: 'Not authenticated' }); return; }
     const progress = await ProgressModel.getUserProgress(userId);
-
     res.json({ progress });
   } catch (error) {
     console.error('Get user progress error:', error);
-    res.status(500).json({ error: 'Failed to get progress' });
+    res.json({ progress: [] }); // return empty instead of 500
   }
 });
 
@@ -28,23 +36,14 @@ router.get('/:experimentId', authenticateToken, async (req: Request, res: Respon
   try {
     const { experimentId } = req.params;
     const userId = req.user?.userId;
-
-    if (!userId) {
-      res.status(401).json({ error: 'Not authenticated' });
-      return;
-    }
-
+    if (!userId) { res.status(401).json({ error: 'Not authenticated' }); return; }
+    if (!isMongoConnected) { res.status(404).json({ error: 'No progress found' }); return; }
     const progress = await ProgressModel.getExperimentProgress(userId, experimentId);
-
-    if (!progress) {
-      res.status(404).json({ error: 'No progress found for this experiment' });
-      return;
-    }
-
+    if (!progress) { res.status(404).json({ error: 'No progress found for this experiment' }); return; }
     res.json({ progress });
   } catch (error) {
     console.error('Get experiment progress error:', error);
-    res.status(500).json({ error: 'Failed to get progress' });
+    res.status(404).json({ error: 'No progress found' });
   }
 });
 
@@ -124,25 +123,8 @@ router.post('/:experimentId/complete', authenticateToken, async (req: Request, r
   }
 });
 
-// Get progress statistics
-router.get('/stats', authenticateToken, async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userId = req.user?.userId;
 
-    if (!userId) {
-      res.status(401).json({ error: 'Not authenticated' });
-      return;
-    }
 
-    const stats = await ProgressModel.getUserStats(userId);
-    console.log('📊 Progress stats for user', userId, ':', stats);
-
-    res.json({ stats });
-  } catch (error) {
-    console.error('Get progress stats error:', error);
-    res.status(500).json({ error: 'Failed to get statistics' });
-  }
-});
 
 // Increment attempt count
 router.post('/:experimentId/attempt', authenticateToken, async (req: Request, res: Response): Promise<void> => {
