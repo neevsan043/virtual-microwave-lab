@@ -24,8 +24,9 @@ const app = express();
 const httpServer = createServer(app);
 
 // Allow both the production Vercel URL and local development
+// Strip trailing slash from FRONTEND_URL — browsers send origins without it
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL?.replace(/\/$/, ''),
   'http://localhost:3000',
   'http://localhost:5173',
 ].filter(Boolean) as string[];
