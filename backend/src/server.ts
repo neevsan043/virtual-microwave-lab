@@ -16,7 +16,9 @@ import progressRoutes from './routes/progress.js';
 import instructorRoutes from './routes/instructor.js';
 import aiAnalysisRoutes from './routes/aiAnalysis.js';
 
-dotenv.config({ override: true }); // override any stale Render dashboard env vars
+// Load .env for local development only — do NOT override env vars already set
+// by the hosting platform (Render, Vercel, etc.)
+dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);

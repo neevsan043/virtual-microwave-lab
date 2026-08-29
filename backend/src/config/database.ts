@@ -3,7 +3,9 @@ import { MongoClient } from 'mongodb';
 import { createClient } from 'redis';
 import dotenv from 'dotenv';
 
-dotenv.config({ override: true }); // override any stale Render dashboard env vars
+// Load .env for local development only — do NOT override env vars already set
+// by the hosting platform (Render, Vercel, etc.)
+dotenv.config();
 
 export const pgPool = new Pool(
   process.env.POSTGRES_URL
