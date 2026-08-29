@@ -46,9 +46,15 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401 || error.response?.status === 403) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      // Only clear auth and redirect if we're not already on the login page
+      // App has no /login route — auth is state-based at root
+      const isLoginRequest = error.config?.url?.includes('/auth/login') || 
+                             error.config?.url?.includes('/auth/register');
+      if (!isLoginRequest) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/';
+      }
     }
     return Promise.reject(error);
   }
