@@ -23,18 +23,22 @@ dotenv.config();
 const app = express();
 const httpServer = createServer(app);
 
-// Allow both the production Vercel URL and local development
-// Strip trailing slash from FRONTEND_URL — browsers send origins without it
+// Build allowed origins list — strip trailing slashes, ignore wildcard "*"
+const rawFrontendUrl = process.env.FRONTEND_URL?.replace(/\/$/, '');
 const allowedOrigins = [
-  process.env.FRONTEND_URL?.replace(/\/$/, ''),
+  rawFrontendUrl !== '*' ? rawFrontendUrl : undefined,
+  'https://virtual-microwave-lab.vercel.app', // always allow the production URL
   'http://localhost:3000',
   'http://localhost:5173',
 ].filter(Boolean) as string[];
 
+console.log('🌐 CORS allowed origins:', allowedOrigins);
+
 const io = new Server(httpServer, {
   cors: {
     origin: allowedOrigins,
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST'],
+    credentials: true,
   }
 });
 
