@@ -53,7 +53,8 @@ api.interceptors.response.use(
       if (!isLoginRequest) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        window.location.href = '/';
+        // Always redirect to the frontend root, never to the API server
+        window.location.href = window.location.origin + '/';
       }
     }
     return Promise.reject(error);
